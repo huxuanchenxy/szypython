@@ -11,27 +11,22 @@ from apscheduler.triggers.cron import CronTrigger
 
 class Device01:
     A01 = 110000
-    time = datetime.now()
     res = '123'
 
 class Device02:
     A02 = 110000
-    time = datetime.now()
     res = '123'
 
 class Device03:
     A03 = 110000
-    time = datetime.now()
     res = '123'
 
 class Device04:
     A04 = 110000
-    time = datetime.now()
     res = '123'
 
 class Device06:
     A06 = 110000
-    time = datetime.now()
     res = '123'
 
 now = datetime.now()
@@ -61,10 +56,9 @@ def test():
     client2.connect(HOST, PORT)
     dev2 = Device01()
     dev2.A01 = 100000
-    dev2.time = datetime.now()
     dev2.res = '123'
     jsonstr2 = json.dumps(dev2.__dict__, default=str)
-    client2.publish(topic,jsonstr2,1)
+    client2.publish(topic,jsonstr2.replace(" ", ""),1)
     logging.info('关第1步 A01 100000')
 
     sleeptime = 5
@@ -79,10 +73,9 @@ def test():
     client4.connect(HOST, PORT)
     dev4 = Device06()
     dev4.A06 = 100000
-    dev4.time = datetime.now()
     dev4.res = '123'
     jsonstr4 = json.dumps(dev4.__dict__, default=str)
-    client4.publish(topic,jsonstr4,1)
+    client4.publish(topic,jsonstr4.replace(" ", ""),1)
     logging.info('关第2步 A06 100000 ')
 
     sleeptime = 5
@@ -96,10 +89,9 @@ def test():
     client6.connect(HOST, PORT)
     dev6 = Device02()
     dev6.A02 = 100000
-    dev6.time = datetime.now()
     dev6.res = '123'
     jsonstr6 = json.dumps(dev6.__dict__, default=str)
-    client6.publish(topic,jsonstr6,1)
+    client6.publish(topic,jsonstr6.replace(" ", ""),1)
     logging.info('关第3步 A02 100000 ')
 
     sleeptime = 5
@@ -114,10 +106,9 @@ def test():
     client8.connect(HOST, PORT)
     dev8 = Device03()
     dev8.A03 = 100000
-    dev8.time = datetime.now()
     dev8.res = '123'
     jsonstr8 = json.dumps(dev8.__dict__, default=str)
-    client8.publish(topic,jsonstr8,1)
+    client8.publish(topic,jsonstr8.replace(" ", ""),1)
     logging.info('关第4步 A03 100000 ')
 
     sleeptime = 5
@@ -131,10 +122,9 @@ def test():
     client10.connect(HOST, PORT)
     dev10 = Device04()
     dev10.A04 = 100000
-    dev10.time = datetime.now()
     dev10.res = '123'
     jsonstr10 = json.dumps(dev10.__dict__, default=str)
-    client10.publish(topic,jsonstr10,1)
+    client10.publish(topic,jsonstr10.replace(" ", ""),1)
     logging.info('关第5步 A04 100000 ')
 
     sleeptime = 5
