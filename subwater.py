@@ -54,9 +54,16 @@ def on_connect(client, userdata, flags, respons_code):
 def on_message(client, userdata, msg):
     # 打印订阅消息主题
     print("topic", msg.topic)
-    # 打印消息数据
-    print("msg payload", json.loads(msg.payload))
-    logging.info(json.loads(msg.payload))
+    try:
+        # 打印消息数据
+        print("msg payload", json.loads(msg.payload))
+        logging.info(json.loads(msg.payload))
+    #except ZeroDivisionError as e:
+        #logging.info(e)
+    except BaseException as e:
+        logging.exception(e)
+    else:
+        print('done')
 
 def main_demo():
     client = mqtt.Client()
