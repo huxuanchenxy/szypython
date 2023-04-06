@@ -12,6 +12,7 @@ import mysql.connector
 import json
 import random
 import time
+import datetime
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -66,6 +67,7 @@ def on_disconnect(client, userdata, rc):
         try:
             rc = client.reconnect()
             print("Reconnected to MQTT broker with code: " + str(rc))
+            client.subscribe("ecgs")
         except:
             print("Failed to reconnect to MQTT broker")
             time.sleep(60*3)
@@ -83,7 +85,9 @@ client.loop_start()
 
 # 每隔10秒发送一次心跳包
 while True:
-    print("Sending heartbeat...")
+    current_time = datetime.datetime.now().strftime("%H:%M:%S")
+    echomsg = ("{} Sending heartbeat...").format(current_time)
+    print(echomsg)
     client.publish("heartbeat", "alive")
     time.sleep(60*3)
 
