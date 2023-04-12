@@ -7,13 +7,19 @@
 # 3. Try selecting some code and hitting edit. Ask the bot to add residual layers.
 # 4. To try out cursor on your own projects, go to the file menu (top left) and open a folder.
 
+import sys
 import paho.mqtt.client as mqtt
 import mysql.connector
 import json
 import random
 import time
 import datetime
+sys.path.append("F:/netcontrol/project/2022/python/")
+from mysqlhelper import Database
 
+
+
+db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("ecgs")
@@ -22,29 +28,22 @@ def on_message(client, userdata, msg):
     try:
         print(msg.topic+" "+str(msg.payload))
         # Connect to the database
-        cnx = mysql.connector.connect(user='root', password='yfzx.2021',
-                                    host='47.101.220.2',
-                                    database='aisense')
-        cursor = cnx.cursor()
+        # cnx = mysql.connector.connect(user='root', password='yfzx.2021',
+        #                             host='47.101.220.2',
+        #                             database='aisense')
+        # cursor = cnx.cursor()
 
         # Insert some data into the table
         msgb = msg.payload
         msgstr = msgb.decode("utf-8")
         jsonobj = json.loads(msgstr)
         # print(jsonobj)
-        add_data = ("INSERT INTO `aisense`.`water`(`device_id`, `ec`, `o2`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)")
-        data = (jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"])
-        cursor.execute(add_data, data)
+        
+        sql = 'INSERT INTO `aisense`.`water`(`device_id`, `ec`, `o2`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+        id = db.insert(sql, data=(jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"]))
 
-        # Make sure data is committed to the database
-        cnx.commit()
-
-        # Close the cursor and connection
-        cursor.close()
-        cnx.close()
     except Exception as e:
         print("Error processing message: ", e)
-
 
 
 # MQTT服务器的地址和端口
@@ -83,9 +82,11 @@ print("Connecting to MQTT broker...")
 client.connect(broker_address, broker_port)
 client.loop_start()
 
+# doalarm({})
+
 # 每隔10秒发送一次心跳包
 while True:
-    current_time = datetime.datetime.now().strftime("%H:%M:%S")
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     echomsg = ("{} Sending heartbeat...").format(current_time)
     print(echomsg)
     client.publish("heartbeat", "alive")
