@@ -1,6 +1,10 @@
 import datetime
+import os
 import socket
+import sys
 import time
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from mysqlhelperv2 import MySQLConnector
 # 亲测可用
 # Define the server address and port
 SERVER_ADDRESS = '47.96.137.123'
@@ -49,6 +53,67 @@ while True:
         data_push_message = client_socket.recv(1024).decode()
         print(current_time,"data_push_message",data_push_message)
         # Process the data push message here
+        str = data_push_message
+        if str.find( 'imei' ) > 0:
+            curdata = str[ str.find( 'imei' ): str.find( 'imei' ) + 500 ]
+            imei = ''
+            ccid= ''
+            vers= ''
+            devicetype= ''
+            rssi= '' 
+            snr= '' 
+            count= '' 
+            nh3= '' 
+            h2s= '' 
+            tvoc= '' 
+            ch2o= '' 
+            co2= '' 
+            pm25= '' 
+            pm10= '' 
+            hum= '' 
+            temp= '' 
+            date1= current_time
+            curarr = curdata.split(';')
+            for cur in curarr:
+                kv = cur.split('=')
+                if kv[0] == 'imei':
+                    imei = kv[1]
+                if kv[0] == 'ccid':
+                    ccid = kv[1]
+                if kv[0] == 'vers':
+                    vers = kv[1]
+                if kv[0] == 'type':
+                    devicetype = kv[1]
+                if kv[0] == 'rssi':
+                    rssi = kv[1]
+                if kv[0] == 'snr':
+                    snr = kv[1]
+                if kv[0] == 'count':
+                    count = kv[1]
+                if kv[0] == 'nh3':
+                    nh3 = kv[1]
+                if kv[0] == 'h2s':
+                    h2s = kv[1]
+                if kv[0] == 'tvoc':
+                    tvoc = kv[1]
+                if kv[0] == 'ch2o':
+                    ch2o = kv[1]
+                if kv[0] == 'co2':
+                    co2 = kv[1]
+                if kv[0] == 'pm25':
+                    pm25 = kv[1]
+                if kv[0] == 'pm10':
+                    pm10 = kv[1]
+                if kv[0] == 'hum':
+                    hum = kv[1]
+                if kv[0] == 'temp':
+                    temp = kv[1]
+            if imei != '':
+                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+                sql = ("INSERT INTO `aisense`.`gas` (`imei`, `ccid`, `vers`, `devicetype`, `rssi`, `snr`, `count`, `nh3`, `h2s`, `tvoc`, `ch2o`, `co2`, `pm25`, `pm10`, `hum`, `temp`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                data = ( imei ,  ccid ,  vers ,  devicetype ,  rssi ,  snr ,  count ,  nh3 ,  h2s ,  tvoc ,  ch2o ,  co2 ,  pm25 ,  pm10 ,  hum ,  temp ,  date1 )
+                ida = mysql_connector.execute_insert(sql, data)
+                print("insert gas sql id", ida)
         time.sleep(60)
     except socket.error as e:
         print(e)
