@@ -7,6 +7,7 @@
 # 3. Try selecting some code and hitting edit. Ask the bot to add residual layers.
 # 4. To try out cursor on your own projects, go to the file menu (top left) and open a folder.
 
+import os
 import sys
 import paho.mqtt.client as mqtt
 import mysql.connector
@@ -14,18 +15,19 @@ import json
 import random
 import time
 import datetime
-sys.path.append("F:/netcontrol/project/2022/python/")
-from mysqlhelper import Database
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from mysqlhelperv2 import MySQLConnector
 
 
 
-db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
+# db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("ecgs")
 
 def on_message(client, userdata, msg):
     try:
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
         print(msg.topic+" "+str(msg.payload))
         # Connect to the database
         # cnx = mysql.connector.connect(user='root', password='yfzx.2021',
@@ -40,7 +42,9 @@ def on_message(client, userdata, msg):
         # print(jsonobj)
         
         sql = 'INSERT INTO `aisense`.`water`(`device_id`, `ec`, `o2`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
-        id = db.insert(sql, data=(jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"]))
+        data = (jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"])
+        id = mysql_connector.execute_insert(sql, data)
+        # id = db.insert(sql, data=(jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"]))
 
     except Exception as e:
         print("Error processing message: ", e)

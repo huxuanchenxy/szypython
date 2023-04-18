@@ -17,11 +17,14 @@ import time
 import datetime
 # sys.path.append("F:/netcontrol/project/2022/python/")
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from mysqlhelper import Database
+from mysqlhelperv2 import MySQLConnector
 
 
 
-db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
+# db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
+
+
+
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("ecgs")
@@ -41,13 +44,17 @@ def on_message(client, userdata, msg):
 
 def doalarm(jsonobj):
     try:
+        print("jsonobj",jsonobj)
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
         print("do alarm")
 
         # Execute a query to select data from a table
         # query = " SELECT * FROM water_alarm_set "
         # cursor.execute(query)
         sql = " SELECT * FROM water_alarm_set "
-        rows = db.select(sql)
+        print("readytosql",sql)
+        # rows = db.select(sql)
+        rows = mysql_connector.execute_query(sql)
         print("sql",sql)
         # print(rows)
         # print(rows[1])
@@ -106,13 +113,15 @@ def doalarm(jsonobj):
                 if flagup == True:
                         sql = ("INSERT INTO `aisense`.`water_alarm2`(`device_id`, `alarmkey`, `alarmvalue`, `alarmdes`, `alarmstatus`, `date1`) VALUES (%s, %s, %s, %s, %s, %s)")
                         data = (jsonobj["id"], alarmkey, alarmvalue, "超出上限", 1, current_time)
-                        id = db.insert(sql, data)
-                        print("insert sql id ", id)
+                        # id = db.insert(sql, data)
+                        id = mysql_connector.execute_insert(sql, data)
+                        print("insert sql id", id)
                 if flagdown == True:
                         sql = ("INSERT INTO `aisense`.`water_alarm2`(`device_id`, `alarmkey`, `alarmvalue`, `alarmdes`, `alarmstatus`, `date1`) VALUES (%s, %s, %s, %s, %s, %s)")
                         data = (jsonobj["id"], alarmkey, alarmvalue, "超出下限", 1, current_time)
-                        id = db.insert(sql, data)
-                        print("insert sql id ", id)
+                        # id = db.insert(sql, data)
+                        id = mysql_connector.execute_insert(sql, data)
+                        print("insert sql id", id)
     except Exception as e:
         print("Error alarm processing message: ", str(e))
 
