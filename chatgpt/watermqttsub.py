@@ -7,6 +7,7 @@
 # 3. Try selecting some code and hitting edit. Ask the bot to add residual layers.
 # 4. To try out cursor on your own projects, go to the file menu (top left) and open a folder.
 
+import logging
 import os
 import sys
 import paho.mqtt.client as mqtt
@@ -18,17 +19,27 @@ import datetime
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from mysqlhelperv2 import MySQLConnector
 
-
-
+now = datetime.datetime.now()
+fname = now.strftime('%Y-%m-%d') + 'watermqttsub.log'
+logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
+                    filename=fname,
+                    filemode='a',##模式，有w和a，w就是写模式，每次都会重新写日志，覆盖之前的日志
+                    #a是追加模式，默认如果不写的话，就是追加模式
+                    format=
+                    '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+                    #日志格式
+                    )
 # db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
+    logging.info("Connected with result code {}".format(str(rc)))
     client.subscribe("ecgs")
 
 def on_message(client, userdata, msg):
     try:
         mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
         print(msg.topic+" "+str(msg.payload))
+        logging.info('receive:topic:{}payload:{}'.format(msg.topic,str(msg.payload)))
         # Connect to the database
         # cnx = mysql.connector.connect(user='root', password='yfzx.2021',
         #                             host='47.101.220.2',
@@ -42,13 +53,13 @@ def on_message(client, userdata, msg):
         # print(jsonobj)
         
         sql = 'INSERT INTO `aisense`.`water`(`device_id`, `ec`, `o2`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
-        data = (jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"])
+        data = (jsonobj["id"], -1, jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"])
         id = mysql_connector.execute_insert(sql, data)
         # id = db.insert(sql, data=(jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"]))
-
+        logging.info('water sql insert id {}'.format(id))
     except Exception as e:
         print("Error processing message: ", e)
-
+        logging.error("Error processing message: {}".format(e))
 
 # MQTT服务器的地址和端口
 broker_address = "47.101.220.2"
@@ -65,14 +76,17 @@ client.keep_alive = keep_alive_interval
 # 定义连接断开的回调函数
 def on_disconnect(client, userdata, rc):
     print("Disconnected from MQTT broker with code: " + str(rc))
+    logging.info("Disconnected from MQTT broker with code: {}".format(str(rc)))
     # 如果连接断开，尝试重新连接
     while rc != 0:
         try:
             rc = client.reconnect()
             print("Reconnected to MQTT broker with code: " + str(rc))
+            logging.info("Reconnected to MQTT broker with code: {}".format(str(rc)))
             client.subscribe("ecgs")
-        except:
+        except Exception as e:
             print("Failed to reconnect to MQTT broker")
+            logging.error("Failed to reconnect to MQTT broker {}".format(e))
             time.sleep(60*3)
 
 # 设置连接断开的回调函数
@@ -83,6 +97,7 @@ client.on_message = on_message
 
 # 连接到MQTT服务器
 print("Connecting to MQTT broker...")
+logging.info("Connecting to MQTT broker...")
 client.connect(broker_address, broker_port)
 client.loop_start()
 
@@ -93,6 +108,7 @@ while True:
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     echomsg = ("{} Sending heartbeat...").format(current_time)
     print(echomsg)
+    logging.info(echomsg)
     client.publish("heartbeat", "alive")
     time.sleep(60*3)
 

@@ -3,9 +3,24 @@ import os
 import socket
 import sys
 import time
+import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from mysqlhelperv2 import MySQLConnector
 # 亲测可用
+
+
+now = datetime.datetime.now()
+fname = now.strftime('%Y-%m-%d') + 'gas3.log'
+
+logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
+                    filename=fname,
+                    filemode='a',##模式，有w和a，w就是写模式，每次都会重新写日志，覆盖之前的日志
+                    #a是追加模式，默认如果不写的话，就是追加模式
+                    format=
+                    '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+                    #日志格式
+                    )
+
 # Define the server address and port
 SERVER_ADDRESS = '47.96.137.123'
 SERVER_PORT = 6671
@@ -17,7 +32,7 @@ auth_message = '63 6F 6D 70 61 6E 79 3D 73 68 64 71 7A 64 68 73 0A'
 auth_message_bytes = bytes.fromhex(auth_message)
 current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print(current_time,"auth_message_bytes:",auth_message_bytes,"END")
-
+logging.info("auth_message_bytes:{}END".format(auth_message_bytes))
 # Create a socket object
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -33,8 +48,10 @@ auth_response = auth_response.replace(' ','').replace("\n", "")
 current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 if auth_response == 'connect=ok':
     print('Authentication successful',current_time)
+    logging.info('Authentication successful')
 else:
     print('Authentication failed',current_time)
+    logging.info('Authentication failed')
 
 # Set the socket options to maintain the heartbeat
 client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
@@ -50,8 +67,12 @@ while True:
         client_socket.send(heartbeat_message_bytes)
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(current_time,"heartbeat_message_bytes",heartbeat_message_bytes,"END")
+        logprint = 'heartbeat_message_bytes:{}END'.format(heartbeat_message_bytes)
+        logging.info(logprint)
         data_push_message = client_socket.recv(1024).decode()
         print(current_time,"data_push_message",data_push_message)
+        logprint = 'data_push_message:{}END'.format(data_push_message)
+        logging.info(logprint)
         # Process the data push message here
         str = data_push_message
         if str.find( 'imei' ) > 0:
@@ -114,8 +135,12 @@ while True:
                 data = ( imei ,  ccid ,  vers ,  devicetype ,  rssi ,  snr ,  count ,  nh3 ,  h2s ,  tvoc ,  ch2o ,  co2 ,  pm25 ,  pm10 ,  hum ,  temp ,  date1 )
                 ida = mysql_connector.execute_insert(sql, data)
                 print("insert gas sql id", ida)
+                logging.info("insert gas sql id{}".format(ida))
         time.sleep(60)
     except socket.error as e:
         print(e)
+        logging.error(e)
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print('Connection terminated',current_time)
+        logging.error('Connection terminated')
         break
