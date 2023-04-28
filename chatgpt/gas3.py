@@ -93,6 +93,7 @@ while True:
             pm10= '' 
             hum= '' 
             temp= '' 
+            eto = ''
             date1= current_time
             curarr = curdata.split(';')
             for cur in curarr:
@@ -129,10 +130,12 @@ while True:
                     hum = kv[1]
                 if kv[0] == 'temp':
                     temp = kv[1]
+                if kv[0] == 'eto':
+                    eto = kv[1]
             if imei != '':
                 mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
-                sql = ("INSERT INTO `aisense`.`gas` (`imei`, `ccid`, `vers`, `devicetype`, `rssi`, `snr`, `count`, `nh3`, `h2s`, `tvoc`, `ch2o`, `co2`, `pm25`, `pm10`, `hum`, `temp`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
-                data = ( imei ,  ccid ,  vers ,  devicetype ,  rssi ,  snr ,  count ,  nh3 ,  h2s ,  tvoc ,  ch2o ,  co2 ,  pm25 ,  pm10 ,  hum ,  temp ,  date1 )
+                sql = ("INSERT INTO `aisense`.`gas` (`imei`, `ccid`, `vers`, `devicetype`, `rssi`, `snr`, `count`, `nh3`, `h2s`, `tvoc`, `ch2o`, `co2`, `pm25`, `pm10`, `hum`, `eto`,`temp`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)")
+                data = ( imei ,  ccid ,  vers ,  devicetype ,  rssi ,  snr ,  count ,  nh3 ,  h2s ,  tvoc ,  ch2o ,  co2 ,  pm25 ,  pm10 ,  hum ,  eto,temp ,  date1 )
                 ida = mysql_connector.execute_insert(sql, data)
                 print("insert gas sql id", ida)
                 logging.info("insert gas sql id{}".format(ida))

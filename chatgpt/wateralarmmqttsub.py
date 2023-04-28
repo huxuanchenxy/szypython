@@ -20,7 +20,9 @@ import datetime
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from mysqlhelperv2 import MySQLConnector
 
-
+# 断线重连相关配置 
+reconnect_interval = 30  # 3秒重连间隔
+reconnect_tries = 10000    # 最大重连次数
 now = datetime.datetime.now()
 fname = now.strftime('%Y-%m-%d') + 'wateralarmmqttsub.log'
 
@@ -163,7 +165,7 @@ keep_alive_interval = 60
 # 定义MQTT客户端对象并设置心跳包间隔时间
 client = mqtt.Client(client_id=client_id)
 client.keep_alive = keep_alive_interval
-
+client.reconnect_delay_set(reconnect_interval, reconnect_tries) 
 # 定义连接断开的回调函数
 def on_disconnect(client, userdata, rc):
     print("Disconnected from MQTT broker with code: " + str(rc))

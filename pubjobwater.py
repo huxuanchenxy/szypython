@@ -19,7 +19,7 @@ class Device02:
 
 
 now = datetime.now()
-fname = now.strftime('%Y-%m-%d') + '.log'
+fname = now.strftime('%Y-%m-%d') + 'pubjobwater.log'
 
 logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     filename=fname,
