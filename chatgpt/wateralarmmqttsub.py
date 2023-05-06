@@ -193,7 +193,7 @@ print("Connecting to MQTT broker...")
 logging.info("Connecting to MQTT broker...")
 client.connect(broker_address, broker_port)
 client.loop_start()
-
+# client.loop_forever()
 # doalarm({})
 
 # 每隔10秒发送一次心跳包

@@ -138,7 +138,25 @@ while True:
                 data = ( imei ,  ccid ,  vers ,  devicetype ,  rssi ,  snr ,  count ,  nh3 ,  h2s ,  tvoc ,  ch2o ,  co2 ,  pm25 ,  pm10 ,  hum ,  eto,temp ,  date1 )
                 ida = mysql_connector.execute_insert(sql, data)
                 print("insert gas sql id", ida)
+                imei = ''
+                ccid= ''
+                vers= ''
+                devicetype= ''
+                rssi= '' 
+                snr= '' 
+                count= '' 
+                nh3= '' 
+                h2s= '' 
+                tvoc= '' 
+                ch2o= '' 
+                co2= '' 
+                pm25= '' 
+                pm10= '' 
+                hum= '' 
+                temp= '' 
+                eto = ''
                 logging.info("insert gas sql id{}".format(ida))
+                time.sleep(3)
         time.sleep(60)
     except socket.error as e:
         print(e)

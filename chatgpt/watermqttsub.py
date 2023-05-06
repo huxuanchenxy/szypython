@@ -84,8 +84,11 @@ def on_disconnect(client, userdata, rc):
     while rc != 0:
         try:
             rc = client.reconnect()
+            # client = mqtt.Client(client_id=client_id)
+            # client.connect(broker_address, broker_port)
             print("Reconnected to MQTT broker with code: " + str(rc))
             logging.info("Reconnected to MQTT broker with code: {}".format(str(rc)))
+            client.loop_start()
             client.subscribe("ecgs")
         except Exception as e:
             print("Failed to reconnect to MQTT broker")
@@ -103,6 +106,7 @@ print("Connecting to MQTT broker...")
 logging.info("Connecting to MQTT broker...")
 client.connect(broker_address, broker_port)
 client.loop_start()
+# client.loop_forever()
 
 # doalarm({})
 
