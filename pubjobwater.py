@@ -37,7 +37,7 @@ topic = "/set/INDOOR00012799" #室内机
 topic2 = "/set/OUTDOOR00012798" #室外机
 
 def test():
-    for i in range(6):
+    for i in range(2):
         logging.info('循环第 {} 次'.format(i))
         sleeptime = 10
         client_id = f'python-mqtt-{random.randint(0, 1000)}'

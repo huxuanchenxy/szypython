@@ -1,3 +1,11 @@
 /*.log
 /chatgpt/*.log
 /__pycache__/*.pyc
+/dist/pyarmor_runtime_000000/*.pyd
+/chatgpt/__pycache__
+/chatgpt/dist/*.log
+/chatgpt/dist/pyarmor_runtime_000000
+/dist/pyarmor_runtime_000000/__init__.py
+/dist
+/chatgpt/dist/__pycache__
+/chatgpt/dist
