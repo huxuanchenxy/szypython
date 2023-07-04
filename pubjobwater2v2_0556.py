@@ -10,9 +10,9 @@ import logging
 from apscheduler.triggers.cron import CronTrigger
 import schedule
 
-class Device01:
-    A01 = 110000
-    res = '123'
+# class Device01:
+#     A01 = 110000
+#     res = '123'
 
 class Device02:
     A02 = 110000
@@ -20,7 +20,7 @@ class Device02:
 
 
 now = datetime.now()
-fname = now.strftime('%Y-%m-%d') + 'pubjobwater2V2.log'
+fname = now.strftime('%Y-%m-%d') + 'pubjobwater2v2_0556.log'
 
 logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     filename=fname,
@@ -34,7 +34,6 @@ logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
 
 HOST = "47.101.220.2"
 PORT = 1883
-topic = "/set/INDOOR00012799" #室内机
 topic2 = "/set/OUTDOOR00012798" #室外机
 
 
@@ -95,7 +94,7 @@ def schedule_job_at_specific_time(start_time):
     time.sleep(delay)
     test2()
 
-start_time = datetime.strptime("13:17", "%H:%M").time()
+start_time = datetime.strptime("09:31", "%H:%M").time()
 schedule_job_at_specific_time(start_time)
 # schedule.every(30).minutes.at("11:16").do(test2)
 schedule.every(27).minutes.do(test2)
