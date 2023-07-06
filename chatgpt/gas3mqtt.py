@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import paho.mqtt.client as mqtt
 import json
 import random
+from mysqlhelperv2 import MySQLConnector
 # 亲测可用
 
 class GasDevice:
@@ -82,7 +83,6 @@ client_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 3)
 
 HOST = "47.101.220.2"
 PORT = 1883
-topic2 = "/gas/data" 
 
 # Receive and process the data push messages
 while True:
@@ -181,7 +181,19 @@ while True:
                 dev1.eto = eto
                 dev1.date1= current_time
                 jsonstr = json.dumps(dev1.__dict__, default=str)
-                client.publish(topic2,jsonstr.replace(" ", ""),1)
+                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+                sql = " SELECT proj FROM devices Where device_id = '{}' ".format(imei)
+                # print(sql)
+                rows = mysql_connector.execute_query(sql)
+                projectid = 0
+                # print(rows)
+                for row in rows:
+                    # print(row)
+                    projectid = row[0]
+                topic2 = "{}/{}".format("/gas/data",projectid)#分项目分发
+                client.publish(topic2,jsonstr,1)
+                logging.info("to topic:{}".format(topic2))
+                logging.info("published:{}".format(jsonstr))
                 time.sleep(3)
         time.sleep(60)
     except socket.error as e:

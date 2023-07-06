@@ -29,7 +29,7 @@ topic2 = "/water/data"
 reconnect_interval = 30  # 3秒重连间隔
 reconnect_tries = 100    # 最大重连次数
 now = datetime.datetime.now()
-fname = now.strftime('%Y-%m-%d') + 'watermqttsub2.log'
+fname = now.strftime('%Y-%m-%d') + 'watermqttsub2mqtt.log'
 logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     filename=fname,
                     filemode='a',##模式，有w和a，w就是写模式，每次都会重新写日志，覆盖之前的日志
@@ -46,25 +46,29 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     try:
-        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+        
         print(msg.topic+" "+str(msg.payload))
         logging.info('receive:topic:{}payload:{}'.format(msg.topic,str(msg.payload)))
-        # Connect to the database
-        # cnx = mysql.connector.connect(user='root', password='yfzx.2021',
-        #                             host='47.101.220.2',
-        #                             database='aisense')
-        # cursor = cnx.cursor()
 
-        # Insert some data into the table
         msgb = msg.payload
-        msgstr = msgb.decode("utf-8")
+        msgstr = msgb.decode("GBK")
         jsonobj = json.loads(msgstr)
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+        sql = " SELECT proj FROM devices Where device_id = '{}' ".format(jsonobj["id"])
+        # print(sql)
+        rows = mysql_connector.execute_query(sql)
+        projectid = 0
+        for row in rows:
+                    # print(row)
+            projectid = row[0]
         # print(jsonobj)
         client_id1 = f'python-mqtt-{random.randint(0, 1000)}'
         client1 = mqtt.Client(client_id1)
         client1.connect(broker_address, broker_port)
+        topic2 = "{}/{}".format("/water/data",projectid)#分项目分发
         client1.publish(topic2,msgstr,1)
-
+        logging.info("to topic:{}".format(topic2))
+        logging.info("published:{}".format(msgstr))
         
     except Exception as e:
         print("Error processing message: ", e)
