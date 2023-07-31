@@ -14,8 +14,8 @@ import schedule
 #     A01 = 110000
 #     res = '123'
 
-class Device02:
-    A02 = 110000
+class Device01:
+    A01 = 110000
     res = '123'
 
 
@@ -44,12 +44,12 @@ def test2():
         client_id = f'python-mqtt-{random.randint(0, 1000)}'
         client = mqtt.Client(client_id)
         client.connect(HOST, PORT)
-        dev1 = Device02()
-        dev1.A02 = 110000
+        dev1 = Device01()
+        dev1.A01 = 110000
         dev1.res = 'OUTDOOR00012798'
         jsonstr = json.dumps(dev1.__dict__, default=str)
         client.publish(topic2,jsonstr.replace(" ", ""),1)
-        logging.info('室外机2 开 110000')
+        logging.info('室外机1 开 110000')
 
         sleeptime = 50
         time.sleep(sleeptime)
@@ -58,12 +58,12 @@ def test2():
         client_id1 = f'python-mqtt-{random.randint(0, 1000)}'
         client1 = mqtt.Client(client_id1)
         client1.connect(HOST, PORT)
-        dev1 = Device02()
-        dev1.A02 = 100000
+        dev1 = Device01()
+        dev1.A01 = 100000
         dev1.res = 'OUTDOOR00012798'
         jsonstr = json.dumps(dev1.__dict__, default=str)
         client1.publish(topic2,jsonstr.replace(" ", ""),1)
-        logging.info('室外机2 关 100000')
+        logging.info('室外机1 关 100000')
 
         sleeptime = 10
         time.sleep(sleeptime)
@@ -94,7 +94,7 @@ def schedule_job_at_specific_time(start_time):
     time.sleep(delay)
     test2()
 
-start_time = datetime.strptime("09:31", "%H:%M").time()
+start_time = datetime.strptime("16:01", "%H:%M").time()
 schedule_job_at_specific_time(start_time)
 # schedule.every(30).minutes.at("11:16").do(test2)
 schedule.every(27).minutes.do(test2)

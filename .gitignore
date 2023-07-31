@@ -9,3 +9,5 @@
 /dist
 /chatgpt/dist/__pycache__
 /chatgpt/dist
+/pythonsocket/*.log
+/pythonsocket/__pycache__/*.pyc
