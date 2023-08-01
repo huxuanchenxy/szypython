@@ -105,7 +105,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
                 print("insert waterzhaoteng sql ", sql1)
             except Exception as e:
                 print(e)
-                logging.info('读取data报错:'.format(e))
+                logging.info('读取data报错:{}'.format(e))
                 
             
             if data == b'exit' or data == b'':
@@ -119,7 +119,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
             conn.send(heartbeat_message_bytes)
             print(' 发送到ip是:{}'.format(client_ip))
             logging.info('发送到ip是 {}'.format(client_ip))
-            time.sleep(60*5)
+            time.sleep(10)
         conn.close()
 
     def finish(self):
