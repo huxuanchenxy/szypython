@@ -73,7 +73,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
 
             except Exception as e:
                 print(e)
-                logging.info('读取deviceid报错:'.format(e))
+                logging.info('读取deviceid报错:{}'.format(e))
                 
             
             try:
@@ -90,7 +90,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
                 float_value = struct.unpack('>f', byte_string)[0]
                 # 输出结果
                 print("解析的浮点数:", float_value)
-                logging.info('解析的浮点数:'.format(float_value))
+                logging.info('解析的浮点数:{}'.format(float_value))
                 
                 print("clientip:{}", client_ip)
                 logging.info('clientip:{}'.format(client_ip))
@@ -100,7 +100,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
                 
                 date1 = datetime.datetime.now()
                 mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx.2021',3306, 'aisense')
-                sql1 = " INSERT INTO `aisense`.`water_zhaotengtest`(`device_id`, `ec`, `cl`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES ( '{}', '-1', '-1', '-1', '-1', '-1', {}, '{}');".format(my_dict[client_ip],float_value,date1)
+                sql1 = " INSERT INTO `aisense`.`water_zhaoteng`(`device_id`, `ec`, `cl`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES ( '{}', '-1', '-1', '-1', '-1', '-1', {}, '{}');".format(my_dict[client_ip],float_value,date1)
                 mysql_connector1.execute_insert(sql1)
                 print("insert waterzhaoteng sql ", sql1)
             except Exception as e:
@@ -119,7 +119,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
             conn.send(heartbeat_message_bytes)
             print(' 发送到ip是:{}'.format(client_ip))
             logging.info('发送到ip是 {}'.format(client_ip))
-            time.sleep(30)
+            time.sleep(60*5)
         conn.close()
 
     def finish(self):
