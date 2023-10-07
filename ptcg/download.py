@@ -1,14 +1,14 @@
 import requests
 
 
-count = 155
+count = 9804
 
-while count <= 166:
+while count <= 9824:
     print(count)
     
     # url = ("https://tcg.pokemon.com/assets/img/expansions/lost-origin/cards/en-us/SWSH11_EN_TG_{}-2x.jpg").format(count)  # Replace with the URL of the image you want to download
-    # url = ("https://asia.pokemon-card.com/hk/card-img/hk0000{}.png").format(count) 
-    url = ("https://limitlesstcg.nyc3.digitaloceanspaces.com/tpci/SSP/SSP_{}_R_EN.png").format(count) 
+    url = ("https://asia.pokemon-card.com/hk/card-img/hk0000{}.png").format(count) 
+    # url = ("https://limitlesstcg.nyc3.digitaloceanspaces.com/tpci/SSP/SSP_{}_R_EN.png").format(count) 
     
     filename = ("SSP_{}_R_EN.png").format(count)  # Replace with the desired filename for the downloaded image
     # https://asia.pokemon-card.com/hk/card-img/hk00008867.png

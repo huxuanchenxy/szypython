@@ -15,14 +15,16 @@ import mysql.connector
 import json
 import random
 import time
-import datetime
+# import datetime
+from datetime import datetime, timedelta
+import random
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from mysqlhelperv2 import MySQLConnector
 
 # 断线重连相关配置 
 reconnect_interval = 30  # 3秒重连间隔
 reconnect_tries = 100    # 最大重连次数
-now = datetime.datetime.now()
+now = datetime.now()
 fname = now.strftime('%Y-%m-%d') + 'watermqttsub2.log'
 logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     filename=fname,
@@ -54,9 +56,25 @@ def on_message(client, userdata, msg):
         msgstr = msgb.decode("utf-8")
         jsonobj = json.loads(msgstr)
         # print(jsonobj)
+        current_time = datetime.now()
+        format_string = "%Y-%m-%d %H:%M:%S.%f"
+        formatted_time = current_time.strftime(format_string)
+        # timestamp = jsonobj["timestamp"]
         
-        sql = 'INSERT INTO `aisense`.`water`(`device_id`, `ec`, `o2`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
-        data = (jsonobj["id"], -1, jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"])
+        
+        random_number = random.randint(1, 999)
+        delta = timedelta(milliseconds=random_number)
+        new_time = current_time - delta
+        # formatted_number = "{:03d}".format(random_number)
+        # timestamp = '{}.{}'.format(timestamp,formatted_number)
+        realtime = jsonobj["timestamp"]
+        cl = -1
+        try:
+            cl = jsonobj["cl"]
+        except Exception as e:
+            cl = -1
+        sql = 'INSERT INTO `aisense`.`water`(`device_id`, `ec`, `o2`, `orp`, `ph`, `temp`, `tub`, `date0`, `date1`,`date2`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        data = (jsonobj["id"], -1, cl, jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"],realtime, new_time,formatted_time)
         id = mysql_connector.execute_insert(sql, data)
         # id = db.insert(sql, data=(jsonobj["id"], jsonobj["ec"], jsonobj["cl"], jsonobj["orp"], jsonobj["ph"], jsonobj["temp"], jsonobj["turb"], jsonobj["timestamp"]))
         logging.info('water sql insert id {}'.format(id))
@@ -161,7 +179,7 @@ while True:
         print('\n手动loop_start')
         logging.info(' manul loop_start')
     else :
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         echomsg = ("{} \nSending heartbeat...").format(current_time)
         print(echomsg)
         logging.info(echomsg)

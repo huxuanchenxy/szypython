@@ -85,16 +85,16 @@ def doalarm(jsonobj):
             alarmvalue = ""
             flagup = False
             flagdown = False
-            if(alarmkey == "cl"):
-                alarmvalue = jsonobj["cl"]
-                if(alarmvalue > limitup):
-                    flagup = True
-                    print("cl too high",alarmvalue,limitup)
-                    logging.info("cl too high alarmvalue is{},limitup is{}".format(alarmvalue,limitup))
-                if(alarmvalue < limitdown):
-                    flagdown = True
-                    print("cl too low",alarmvalue,limitdown)
-                    logging.info("cl too low alarmvalue is{},limitdown is {}".format(alarmvalue,limitdown))
+            # if(alarmkey == "cl"):
+            #     alarmvalue = jsonobj["cl"]
+            #     if(alarmvalue > limitup):
+            #         flagup = True
+            #         print("cl too high",alarmvalue,limitup)
+            #         logging.info("cl too high alarmvalue is{},limitup is{}".format(alarmvalue,limitup))
+            #     if(alarmvalue < limitdown):
+            #         flagdown = True
+            #         print("cl too low",alarmvalue,limitdown)
+            #         logging.info("cl too low alarmvalue is{},limitdown is {}".format(alarmvalue,limitdown))
             if(alarmkey == "orp"):
                 alarmvalue = jsonobj["orp"]
                 if(alarmvalue > limitup):
