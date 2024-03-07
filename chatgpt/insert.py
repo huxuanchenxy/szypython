@@ -3,7 +3,7 @@ import string
 import mysql.connector
 
 # Connect to the database
-cnx = mysql.connector.connect(user='root', password='yfzx.2021',
+cnx = mysql.connector.connect(user='root', password='yfzx@2024',
                               host='47.101.220.2',
                               database='aisense')
 cursor = cnx.cursor()

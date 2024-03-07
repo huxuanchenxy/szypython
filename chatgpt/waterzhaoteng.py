@@ -62,7 +62,7 @@ while True:
             if wrwdm == 'B01':
                   v4 = v 
     try:
-        mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx.2021',3306, 'server_mtw')
+        mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx@2024',3306, 'server_mtw')
         sql1 = " INSERT INTO `server_mtw`.`pwkdata`(`siteNo`, `res_date`, `isupload`, `flag`, `v1`, `v2`, `v3`, `v4`, `v5`, `v6`, `v7`, `v8`, `v9`, `v10`, `v11`, `v12`, `v13`, `v14`, `v15`) VALUES ('{}', '{}', 0, 'N', {}, 0, {}, {}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); ".format(siteNo,res_date,v1,v3,v4)
         mysql_connector1.execute_insert(sql1)
         print("insert waterzhaoteng sql ", sql1)

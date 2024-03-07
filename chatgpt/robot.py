@@ -48,6 +48,8 @@ def GetRobotRealTimeInfoResponse():
     # logging.info(response.text)
 
 def dbInsert(ret):
+    print(ret['Code'])
+    logging.info(ret['Code'])
     if ret['Code'] == 0:
         print('Read xml success')
         TEM = ''
@@ -92,12 +94,16 @@ def dbInsert(ret):
             if obj['id'] == 18:
                 PM50 = obj['PM50']
         # print('co',CO)
-        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
         sql = (" INSERT INTO `aisense`.`gasrobot`( `o2`, `h2s`, `co`, `ch4`, `co2`, `pm25`, `pm10`, `hum`, `pm50`, `tem`, `robotPositonX`, `robotPositonY`, `height`, `rotationAngle`, `smoke`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
         data = (   O2 ,  H2S ,  CO ,  CH4 ,  '' ,  PM25 ,  '' ,  HUM ,  PM50 ,  TEM ,  robotPositonX ,  robotPositonY ,  height ,  rotationAngle ,  SMOKE ,  collectTime  )
         ida = mysql_connector.execute_insert(sql, data)
         print("insert gas sql id", ida)
         logging.info("insert gas sql id {} ".format(ida))
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        echomsg = ("Datetime: {} ").format(current_time)
+        print(echomsg)
+        logging.info(echomsg)
         # print(PM50)
 
 def getXml(xml):

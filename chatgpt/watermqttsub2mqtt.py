@@ -38,7 +38,7 @@ logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
                     #日志格式
                     )
-# db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
+# db = Database(host='47.101.220.2', user='root', password='yfzx@2024', db='aisense')
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     logging.info("Connected with result code {}".format(str(rc)))
@@ -53,7 +53,7 @@ def on_message(client, userdata, msg):
         msgb = msg.payload
         msgstr = msgb.decode("GBK")
         jsonobj = json.loads(msgstr)
-        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
         sql = " SELECT proj FROM devices Where device_id = '{}' ".format(jsonobj["id"])
         # print(sql)
         rows = mysql_connector.execute_query(sql)

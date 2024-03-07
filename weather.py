@@ -42,7 +42,7 @@ def insertDB():
     try:
         ret = getWeather()
         now = datetime.datetime.now()
-        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 3306,'aisense')
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 3306,'aisense')
         sql = (" INSERT INTO `aisense`.`weather`(`areacode`, `value`, `date1`) VALUES ('{}', '{}', '{}') ".format('310000',ret,now))
 
         ida = mysql_connector.execute_insert(sql)

@@ -134,7 +134,7 @@ while True:
                 if kv[0] == 'eto':
                     eto = kv[1]
             if imei != '':
-                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
                 sql = " SELECT * FROM gas_alarm_set "
                 rows = mysql_connector.execute_query(sql)
 

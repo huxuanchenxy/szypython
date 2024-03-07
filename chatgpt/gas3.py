@@ -133,7 +133,7 @@ while True:
                 if kv[0] == 'eto':
                     eto = kv[1]
             if imei != '':
-                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
                 sql = ("INSERT INTO `aisense`.`gas` (`imei`, `ccid`, `vers`, `devicetype`, `rssi`, `snr`, `count`, `nh3`, `h2s`, `tvoc`, `ch2o`, `co2`, `pm25`, `pm10`, `hum`, `eto`,`temp`, `date1`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)")
                 data = ( imei ,  ccid ,  vers ,  devicetype ,  rssi ,  snr ,  count ,  nh3 ,  h2s ,  tvoc ,  ch2o ,  co2 ,  pm25 ,  pm10 ,  hum ,  eto,temp ,  date1 )
                 ida = mysql_connector.execute_insert(sql, data)

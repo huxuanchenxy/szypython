@@ -20,7 +20,7 @@ class Device01:
 
 
 now = datetime.now()
-fname = now.strftime('%Y-%m-%d') + 'pubjobwater2V2_0010001.log'
+fname = now.strftime('%Y-%m-%d') + 'pubjobwater2V2_0010001mormal.log'
 
 logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     filename=fname,
@@ -94,11 +94,28 @@ def schedule_job_at_specific_time(start_time):
     time.sleep(delay)
     test2()
 
-start_time = datetime.strptime("09:11", "%H:%M").time()
-schedule_job_at_specific_time(start_time)
-# schedule.every(30).minutes.at("11:16").do(test2)
-schedule.every(117).minutes.do(test2)
+# start_time = datetime.strptime("10:23", "%H:%M").time()
+# schedule_job_at_specific_time(start_time)
+# # schedule.every(30).minutes.at("11:16").do(test2)
+# schedule.every(237).minutes.do(test2)
 
+# while True:
+#     schedule.run_pending()
+#     # time.sleep(1)
+dt2 = datetime.strptime('2024-03-06 12:00:00','%Y-%m-%d %H:%M:%S')
+logging.info('dt2 set: {}'.format(dt2))
+
+# diff = dt1 - dt2
+# logging.info('day seconds diff: {}'.format(diff))
 while True:
-    schedule.run_pending()
-    # time.sleep(1)
+    dt1 = datetime.now()
+    logging.info('dt1 now: {}'.format(dt1))
+    if(dt1 > dt2):
+        while True:
+            try:
+                test2()
+            except Exception as e:
+                logging.error(e)
+            time.sleep(60*237)
+    logging.info('没到开始时间等60秒后重试')
+    time.sleep(60)

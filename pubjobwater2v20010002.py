@@ -10,17 +10,17 @@ import logging
 from apscheduler.triggers.cron import CronTrigger
 import schedule
 
-# class Device01:
-#     A01 = 110000
-#     res = '123'
-
 class Device01:
     A01 = 110000
     res = '123'
 
+# class Device02:
+#     A02 = 110000
+#     res = '123'
+
 
 now = datetime.now()
-fname = now.strftime('%Y-%m-%d') + 'pubjobwater2v20010002.log'
+fname = now.strftime('%Y-%m-%d') + 'pubjobwater2V2_0010002mormal.log'
 
 logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     filename=fname,
@@ -34,11 +34,11 @@ logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
 
 HOST = "47.101.220.2"
 PORT = 1883
-topic2 = "/set/OUTDOOR00012798" #室外机
+topic = "/set/OUTDOOR00012798" #室外机
 
 
 def test2():
-    for i in range(3):
+    for i in range(1):
         logging.info('循环第 {} 次'.format(i))
         sleeptime = 10
         client_id = f'python-mqtt-{random.randint(0, 1000)}'
@@ -46,12 +46,12 @@ def test2():
         client.connect(HOST, PORT)
         dev1 = Device01()
         dev1.A01 = 110000
-        dev1.res = 'OUTDOOR00012798'
+        dev1.res = 'INDOOR00012799'
         jsonstr = json.dumps(dev1.__dict__, default=str)
-        client.publish(topic2,jsonstr.replace(" ", ""),1)
-        logging.info('室外机1 开 110000')
+        client.publish(topic,jsonstr.replace(" ", ""),1)
+        logging.info('室外机A01 开 110000')
 
-        sleeptime = 50
+        sleeptime = 60*3
         time.sleep(sleeptime)
         logging.info('sleep '+ str(sleeptime) +' 秒')
 
@@ -60,14 +60,14 @@ def test2():
         client1.connect(HOST, PORT)
         dev1 = Device01()
         dev1.A01 = 100000
-        dev1.res = 'OUTDOOR00012798'
+        dev1.res = 'INDOOR00012799'
         jsonstr = json.dumps(dev1.__dict__, default=str)
-        client1.publish(topic2,jsonstr.replace(" ", ""),1)
-        logging.info('室外机1 关 100000')
+        client1.publish(topic,jsonstr.replace(" ", ""),1)
+        logging.info('室外机A01 关 100000')
 
-        sleeptime = 10
-        time.sleep(sleeptime)
-        logging.info('sleep '+ str(sleeptime) +' 秒')
+        # sleeptime = 10
+        # time.sleep(sleeptime)
+        # logging.info('sleep '+ str(sleeptime) +' 秒')
     #client.loop_forever()
 
 # def dojob():
@@ -94,11 +94,29 @@ def schedule_job_at_specific_time(start_time):
     time.sleep(delay)
     test2()
 
-start_time = datetime.strptime("16:01", "%H:%M").time()
-schedule_job_at_specific_time(start_time)
-# schedule.every(30).minutes.at("11:16").do(test2)
-schedule.every(27).minutes.do(test2)
+# start_time = datetime.strptime("10:25", "%H:%M").time()
+# schedule_job_at_specific_time(start_time)
+# # schedule.every(30).minutes.at("11:16").do(test2)
+# schedule.every(237).minutes.do(test2)
 
+# while True:
+#     schedule.run_pending()
+#     # time.sleep(1)
+# now1 = datetime.now()
+dt2 = datetime.strptime('2024-03-06 12:31:00','%Y-%m-%d %H:%M:%S')
+logging.info('dt2 set: {}'.format(dt2))
+
+# diff = dt1 - dt2
+# logging.info('day seconds diff: {}'.format(diff))
 while True:
-    schedule.run_pending()
-    # time.sleep(1)
+    dt1 = datetime.now()
+    logging.info('dt1 now: {}'.format(dt1))
+    if(dt1 > dt2):
+        while True:
+            try:
+                test2()
+            except Exception as e:
+                logging.error(e)
+            time.sleep(60*237)
+    logging.info('没到开始时间等60秒后重试')
+    time.sleep(60)

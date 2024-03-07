@@ -34,7 +34,7 @@ logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
                     #日志格式
                     )
-# db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
+# db = Database(host='47.101.220.2', user='root', password='yfzx@2024', db='aisense')
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     logging.info("Connected with result code {}".format(str(rc)))
@@ -42,11 +42,11 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     try:
-        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
         print(msg.topic+" "+str(msg.payload))
         logging.info('receive:topic:{}payload:{}'.format(msg.topic,str(msg.payload)))
         # Connect to the database
-        # cnx = mysql.connector.connect(user='root', password='yfzx.2021',
+        # cnx = mysql.connector.connect(user='root', password='yfzx@2024',
         #                             host='47.101.220.2',
         #                             database='aisense')
         # cursor = cnx.cursor()

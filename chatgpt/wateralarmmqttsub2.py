@@ -34,7 +34,7 @@ logging.basicConfig(level=logging.INFO,#控制台打印的日志级别
                     '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
                     #日志格式
                     )
-# db = Database(host='47.101.220.2', user='root', password='yfzx.2021', db='aisense')
+# db = Database(host='47.101.220.2', user='root', password='yfzx@2024', db='aisense')
 
 
 
@@ -61,7 +61,7 @@ def doalarm(jsonobj):
     try:
         print("jsonobj",jsonobj)
         logging.info("jsonobj",jsonobj)
-        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+        mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
         print("do alarm")
         logging.info("do alarm")
         # Execute a query to select data from a table

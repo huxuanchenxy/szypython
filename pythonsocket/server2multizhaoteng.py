@@ -99,7 +99,7 @@ class MySocketServer(socketserver.BaseRequestHandler):
                 
                 
                 date1 = datetime.datetime.now()
-                mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx.2021',3306, 'aisense')
+                mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx@2024',3306, 'aisense')
                 sql1 = " INSERT INTO `aisense`.`water_zhaoteng`(`device_id`, `ec`, `cl`, `orp`, `ph`, `temp`, `tub`, `date1`) VALUES ( '{}', '-1', '-1', '-1', '-1', '-1', {}, '{}');".format(my_dict[client_ip],float_value,date1)
                 mysql_connector1.execute_insert(sql1)
                 print("insert waterzhaoteng sql ", sql1)

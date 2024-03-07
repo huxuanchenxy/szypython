@@ -181,7 +181,7 @@ while True:
                 dev1.eto = eto
                 dev1.date1= current_time
                 jsonstr = json.dumps(dev1.__dict__, default=str)
-                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx.2021', 'aisense')
+                mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
                 sql = " SELECT proj FROM devices Where device_id = '{}' ".format(imei)
                 # print(sql)
                 rows = mysql_connector.execute_query(sql)

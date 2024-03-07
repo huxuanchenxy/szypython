@@ -35,7 +35,7 @@ try:
             current_time += datetime.timedelta(minutes=3)
         random_number = random.randint(40, 75)
         print(random_number)
-        mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx.2021',3306, 'aisense')
+        mysql_connector1 = MySQLConnector('47.101.220.2','root', 'yfzx@2024',3306, 'aisense')
         sql1 = " INSERT INTO `aisense`.`g40_info`(`road_part`, `camera`, `time`, `carcount`, `timespan`) VALUES (28, 'K35+520', '{}', {}, 180);".format(current_time,random_number)
         mysql_connector1.execute_insert(sql1)
         print("insert g40_info sql ", sql1)

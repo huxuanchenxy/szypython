@@ -72,11 +72,29 @@ def schedule_job_at_specific_time(start_time):
     time.sleep(delay)
     test2()
 
-start_time = datetime.strptime("15:40", "%H:%M").time()
-schedule_job_at_specific_time(start_time)
-# schedule.every(30).minutes.at("11:16").do(test2)
-schedule.every(117).minutes.do(test2)
+# start_time = datetime.strptime("11:00", "%H:%M").time()
+# schedule_job_at_specific_time(start_time)
+# # schedule.every(30).minutes.at("11:16").do(test2)
+# schedule.every(237).minutes.do(test2)
 
+# while True:
+#     schedule.run_pending()
+#     # time.sleep(1)
+
+dt2 = datetime.strptime('2024-03-06 12:30:00','%Y-%m-%d %H:%M:%S')
+logging.info('dt2 set: {}'.format(dt2))
+
+# diff = dt1 - dt2
+# logging.info('day seconds diff: {}'.format(diff))
 while True:
-    schedule.run_pending()
-    # time.sleep(1)
+    dt1 = datetime.now()
+    logging.info('dt1 now: {}'.format(dt1))
+    if(dt1 > dt2):
+        while True:
+            try:
+                test2()
+            except Exception as e:
+                logging.error(e)
+            time.sleep(60*239)
+    logging.info('没到开始时间等60秒后重试')
+    time.sleep(60)
