@@ -51,7 +51,7 @@ def test2():
         client.publish(topic,jsonstr.replace(" ", ""),1)
         logging.info('室外机A01 开 110000')
 
-        sleeptime = 60*3
+        sleeptime = 60
         time.sleep(sleeptime)
         logging.info('sleep '+ str(sleeptime) +' 秒')
 
@@ -103,7 +103,7 @@ def schedule_job_at_specific_time(start_time):
 #     schedule.run_pending()
 #     # time.sleep(1)
 # now1 = datetime.now()
-dt2 = datetime.strptime('2024-03-06 12:31:00','%Y-%m-%d %H:%M:%S')
+dt2 = datetime.strptime('2024-04-01 12:29:00','%Y-%m-%d %H:%M:%S')
 logging.info('dt2 set: {}'.format(dt2))
 
 # diff = dt1 - dt2
@@ -117,6 +117,6 @@ while True:
                 test2()
             except Exception as e:
                 logging.error(e)
-            time.sleep(60*237)
+            time.sleep(60*239)
     logging.info('没到开始时间等60秒后重试')
     time.sleep(60)
