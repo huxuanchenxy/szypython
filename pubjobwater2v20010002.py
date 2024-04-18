@@ -103,7 +103,7 @@ def schedule_job_at_specific_time(start_time):
 #     schedule.run_pending()
 #     # time.sleep(1)
 # now1 = datetime.now()
-dt2 = datetime.strptime('2024-04-01 12:29:00','%Y-%m-%d %H:%M:%S')
+dt2 = datetime.strptime('2024-04-15 12:29:00','%Y-%m-%d %H:%M:%S')
 logging.info('dt2 set: {}'.format(dt2))
 
 # diff = dt1 - dt2

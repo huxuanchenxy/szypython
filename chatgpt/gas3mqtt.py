@@ -30,6 +30,7 @@ class GasDevice:
     temp= '' 
     eto = ''
     date1= ''
+    address = ''
 
 now = datetime.datetime.now()
 fname = now.strftime('%Y-%m-%d') + 'gas3mqtt.log'
@@ -180,16 +181,20 @@ while True:
                 dev1.temp= temp 
                 dev1.eto = eto
                 dev1.date1= current_time
-                jsonstr = json.dumps(dev1.__dict__, default=str)
+                
                 mysql_connector = MySQLConnector('47.101.220.2', 'root', 'yfzx@2024', 'aisense')
-                sql = " SELECT proj FROM devices Where device_id = '{}' ".format(imei)
+                sql = " SELECT proj,install_addr FROM devices Where device_id = '{}' ".format(imei)
                 # print(sql)
                 rows = mysql_connector.execute_query(sql)
                 projectid = 0
+                address = ''
                 # print(rows)
                 for row in rows:
-                    # print(row)
+                    #print(row)
                     projectid = row[0]
+                    address = row[1]
+                dev1.address = address
+                jsonstr = json.dumps(dev1.__dict__, default=str)
                 topic2 = "{}/{}".format("/gas/data",projectid)#分项目分发
                 client.publish(topic2,jsonstr,1)
                 logging.info("to topic:{}".format(topic2))
